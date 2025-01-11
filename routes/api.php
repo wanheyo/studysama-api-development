@@ -33,6 +33,8 @@ Route::get('/', function (Request $request) {
 // Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 
 Route::group(['prefix' => 'studysama'], function (){
 
