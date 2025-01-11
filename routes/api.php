@@ -17,9 +17,9 @@ use App\Http\Controllers\LessonController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::get('/', function (Request $request) {
     return response()->json([
@@ -27,9 +27,10 @@ Route::get('/', function (Request $request) {
     ], 200);
 });
 
-// Route::get('/users', [UserController::class, 'index']);
-
 Route::group(['prefix' => 'studysama'], function (){
+
+    Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+
     //user controller
     Route::group(['prefix' => 'users'], function (){
         //auth
