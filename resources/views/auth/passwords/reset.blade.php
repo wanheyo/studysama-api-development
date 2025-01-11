@@ -17,7 +17,7 @@
         }
         .container {
             background-color: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -37,43 +37,21 @@
             margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            position: relative;
+            margin-bottom: 20px;
         }
         label {
-            margin-bottom: 5px;
+            display: block;
+            margin-bottom: 8px;
             font-weight: bold;
+            text-align: left;
         }
         input[type="password"] {
-            width: calc(100% - 40px); /* Adjust width for toggle button */
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
-        }
-        .toggle-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            position: relative;
-        }
-        .toggle-password-btn {
-            margin-left: 10px;
-            background: none;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 6px 10px;
-            cursor: pointer;
-            font-size: 0.9em;
-            color: #7734A3;
-        }
-        .toggle-password-btn:hover {
-            background-color: #f2f2f2;
-            color: #602f84;
+            font-size: 16px;
         }
         .error-message {
             color: red;
@@ -83,12 +61,13 @@
         button {
             background-color: #7734A3;
             color: white;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 5px;
             width: 100%;
             cursor: pointer;
             font-size: 16px;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #602f84;
@@ -114,19 +93,13 @@
 
             <div class="form-group">
                 <label for="password">New Password</label>
-                <div class="toggle-wrapper">
-                    <input type="password" name="password" id="password" required>
-                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password', this)">Show</button>
-                </div>
+                <input type="password" name="password" id="password" required>
                 <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
-                <div class="toggle-wrapper">
-                    <input type="password" name="password_confirmation" id="password_confirmation" required>
-                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password_confirmation', this)">Show</button>
-                </div>
+                <input type="password" name="password_confirmation" id="password_confirmation" required>
                 <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
@@ -136,14 +109,5 @@
     <footer>
         &copy; {{ date('Y') }} StudySama. All rights reserved.
     </footer>
-
-    <script>
-        function togglePasswordVisibility(id, button) {
-            const input = document.getElementById(id);
-            const isPassword = input.getAttribute('type') === 'password';
-            input.setAttribute('type', isPassword ? 'text' : 'password');
-            button.textContent = isPassword ? 'Hide' : 'Show';
-        }
-    </script>
 </body>
 </html>
