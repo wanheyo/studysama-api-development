@@ -66,10 +66,7 @@ class ForgotPasswordController extends Controller
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            return response()->json([
-                'status' => true,
-                'message' => __($status)
-            ]);
+            return redirect()->route('password.success');
         }
 
         return response()->json([
@@ -77,4 +74,5 @@ class ForgotPasswordController extends Controller
             'message' => __($status)
         ], 400);
     }
+
 }

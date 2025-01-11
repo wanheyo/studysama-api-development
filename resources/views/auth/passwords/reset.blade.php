@@ -21,13 +21,22 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
+            text-align: center;
+        }
+        .logo-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
         }
         h1 {
             color: #7734A3;
-            text-align: center;
+            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 15px;
+            position: relative;
         }
         label {
             display: block;
@@ -59,10 +68,17 @@
         button:hover {
             background-color: #602f84;
         }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-placeholder"></div>
         <h1>Reset Password</h1>
         <form method="POST" action="{{ route('password.update') }}" id="resetForm">
             @csrf
@@ -72,12 +88,14 @@
             <div class="form-group">
                 <label for="password">New Password</label>
                 <input type="password" name="password" id="password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
                 <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password_confirmation')">👁️</span>
                 <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
@@ -86,30 +104,46 @@
     </div>
 
     <script>
-        document.getElementById('resetForm').addEventListener('submit', function(event) {
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+        }
+
+        document.getElementById('resetForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             
-            const password = document.getElementById('password').value;
-            const passwordConfirmation = document.getElementById('password_confirmation').value;
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
 
-            let valid = true;
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            if (password.length < 8) {
-                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.';
-                valid = false;
-            } else {
-                document.getElementById('passwordError').textContent = '';
-            }
-
-            if (password !== passwordConfirmation) {
-                document.getElementById('passwordConfirmationError').textContent = 'Passwords do not match.';
-                valid = false;
-            } else {
-                document.getElementById('passwordConfirmationError').textContent = '';
-            }
-
-            if (valid) {
-                event.target.submit();
+                const result = await response.json();
+                
+                if (response.ok) {
+                    window.location.href = '{{ route('password.success') }}';
+                } else {
+                    // handle validation errors
+                    if (result.errors) {
+                        document.getElementById('passwordError').textContent = result.errors.password?.[0] || '';
+                        document.getElementById('passwordConfirmationError').textContent = result.errors.password_confirmation?.[0] || '';
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
         });
     </script>
