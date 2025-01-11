@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/', function (Request $request) {
     return response()->json([
-        'message' => 'Server is up=',
+        'message' => 'Server is up and running',
     ], 200);
 });
 
