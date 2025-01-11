@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
@@ -28,9 +29,12 @@ Route::get('/', function (Request $request) {
     ], 200);
 });
 
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 Route::group(['prefix' => 'studysama'], function (){
 
-    Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    //Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 
     //user controller
     Route::group(['prefix' => 'users'], function (){
