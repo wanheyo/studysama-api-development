@@ -8,12 +8,12 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #f5f5f5;
             margin: 0;
+            padding: 20px;
         }
         .container {
             background-color: white;
@@ -23,6 +23,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            box-sizing: border-box;
         }
         .logo {
             margin: 0 auto 20px;
@@ -52,6 +53,13 @@
             border-radius: 5px;
             box-sizing: border-box;
             font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            cursor: pointer;
         }
         .error-message {
             color: red;
@@ -109,5 +117,44 @@
     <footer>
         &copy; {{ date('Y') }} StudySama. All rights reserved.
     </footer>
+
+    <script>
+        document.getElementById('resetForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    window.location.href = '{{ route('password.success') }}';
+                } else {
+                    // handle validation errors
+                    if (result.errors) {
+                        document.getElementById('passwordError').textContent = result.errors.password?.[0] || '';
+                        document.getElementById('passwordConfirmationError').textContent = result.errors.password_confirmation?.[0] || '';
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
 </body>
 </html>
