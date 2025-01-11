@@ -38,16 +38,16 @@
         }
         .form-group {
             margin-bottom: 20px;
+            text-align: left;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            text-align: left;
         }
         input[type="password"] {
-            width: 100%;
-            padding: 12px;
+            width: calc(100% - 20px); /* Ensure input aligns perfectly */
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
