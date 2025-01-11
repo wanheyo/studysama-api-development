@@ -80,4 +80,9 @@ class User extends Authenticatable implements CanResetPassword
                     ->withPivot(['role_id', 'rating', 'comment', 'status'])
                     ->withTimestamps();
     }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\CustomResetPasswordNotification($token));
+    }
 }
