@@ -41,6 +41,7 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            position: relative;
         }
         label {
             display: block;
@@ -54,12 +55,6 @@
             border-radius: 5px;
             box-sizing: border-box;
             font-size: 16px;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 35px;
-            cursor: pointer;
         }
         .error-message {
             color: red;
@@ -102,14 +97,12 @@
             <div class="form-group">
                 <label for="password">New Password</label>
                 <input type="password" name="password" id="password" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
                 <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password_confirmation')">👁️</span>
                 <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
@@ -121,12 +114,6 @@
     </div>
 
     <script>
-        function togglePasswordVisibility(id) {
-            const input = document.getElementById(id);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-        }
-
         document.getElementById('resetForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             
