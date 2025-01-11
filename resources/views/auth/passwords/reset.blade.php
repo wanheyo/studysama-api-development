@@ -38,19 +38,42 @@
         }
         .form-group {
             margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             position: relative;
         }
         label {
-            display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
         input[type="password"] {
-            width: 100%;
-            padding: 10px 40px 10px 10px; /* Adjust padding for eye icon */
+            width: calc(100% - 40px); /* Adjust width for toggle button */
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+        }
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: relative;
+        }
+        .toggle-password-btn {
+            margin-left: 10px;
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #7734A3;
+        }
+        .toggle-password-btn:hover {
+            background-color: #f2f2f2;
+            color: #602f84;
         }
         .error-message {
             color: red;
@@ -69,18 +92,6 @@
         }
         button:hover {
             background-color: #602f84;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 18px;
-            color: #666;
-        }
-        .toggle-password:hover {
-            color: #333;
         }
         footer {
             margin-top: 20px;
@@ -103,15 +114,19 @@
 
             <div class="form-group">
                 <label for="password">New Password</label>
-                <input type="password" name="password" id="password" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password', this)">👁️</span>
+                <div class="toggle-wrapper">
+                    <input type="password" name="password" id="password" required>
+                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password', this)">Show</button>
+                </div>
                 <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password_confirmation', this)">👁️</span>
+                <div class="toggle-wrapper">
+                    <input type="password" name="password_confirmation" id="password_confirmation" required>
+                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('password_confirmation', this)">Show</button>
+                </div>
                 <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
@@ -119,15 +134,15 @@
         </form>
     </div>
     <footer>
-        &copy; {{ date('Y') }} Your Company. All rights reserved.
+        &copy; {{ date('Y') }} StudySama. All rights reserved.
     </footer>
 
     <script>
-        function togglePasswordVisibility(id, icon) {
+        function togglePasswordVisibility(id, button) {
             const input = document.getElementById(id);
             const isPassword = input.getAttribute('type') === 'password';
             input.setAttribute('type', isPassword ? 'text' : 'password');
-            icon.textContent = isPassword ? '🙈' : '👁️'; // Switch icon
+            button.textContent = isPassword ? 'Hide' : 'Show';
         }
     </script>
 </body>
