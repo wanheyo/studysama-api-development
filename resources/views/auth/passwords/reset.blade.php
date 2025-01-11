@@ -1,4 +1,3 @@
-<!-- resources/views/auth/passwords/reset.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +8,12 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #f5f5f5;
+            margin: 0;
         }
         .container {
             background-color: white;
@@ -23,12 +24,13 @@
             max-width: 400px;
             text-align: center;
         }
-        .logo-placeholder {
+        .logo {
+            margin: 0 auto 20px;
+        }
+        .logo img {
             width: 100px;
             height: 100px;
-            background-color: #ccc;
             border-radius: 50%;
-            margin: 0 auto 20px auto;
         }
         h1 {
             color: #7734A3;
@@ -45,7 +47,7 @@
         }
         input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 10px 40px 10px 10px; /* Adjust padding for eye icon */
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
@@ -71,14 +73,28 @@
         .toggle-password {
             position: absolute;
             right: 10px;
-            top: 35px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+        .toggle-password:hover {
+            color: #333;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo-placeholder"></div>
+        <div class="logo">
+            <img src="{{ asset('images/SS_Mobile.png') }}" alt="Logo">
+        </div>
         <h1>Reset Password</h1>
         <form method="POST" action="{{ route('password.update') }}" id="resetForm">
             @csrf
@@ -88,64 +104,31 @@
             <div class="form-group">
                 <label for="password">New Password</label>
                 <input type="password" name="password" id="password" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password', this)">👁️</span>
                 <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required>
-                <span class="toggle-password" onclick="togglePasswordVisibility('password_confirmation')">👁️</span>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password_confirmation', this)">👁️</span>
                 <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
             <button type="submit">Reset Password</button>
         </form>
     </div>
+    <footer>
+        &copy; {{ date('Y') }} Your Company. All rights reserved.
+    </footer>
 
     <script>
-        function togglePasswordVisibility(id) {
+        function togglePasswordVisibility(id, icon) {
             const input = document.getElementById(id);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
+            const isPassword = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            icon.textContent = isPassword ? '🙈' : '👁️'; // Switch icon
         }
-
-        document.getElementById('resetForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
-
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                
-                if (response.ok) {
-                    window.location.href = '{{ route('password.success') }}';
-                } else {
-                    // handle validation errors
-                    if (result.errors) {
-                        document.getElementById('passwordError').textContent = result.errors.password?.[0] || '';
-                        document.getElementById('passwordConfirmationError').textContent = result.errors.password_confirmation?.[0] || '';
-                    } else {
-                        alert(result.message);
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
     </script>
 </body>
 </html>
