@@ -49,17 +49,12 @@
             font-weight: bold;
         }
         input[type="password"] {
-            width: calc(100% - 20px); /* Ensure input aligns perfectly */
+            width: calc(100% - 20px);
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             font-size: 16px;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            margin-top: 5px;
         }
         button {
             background-color: #7734A3;
@@ -89,21 +84,19 @@
             <img src="{{ asset('images/SS_Mobile.png') }}" alt="Logo">
         </div>
         <h1>Reset Password</h1>
-        <form method="POST" action="{{ route('password.update') }}" id="resetForm">
+        <form method="POST" action="{{ route('password.update') }}">
             @csrf
-            <input type="hidden" name="token" value="{{ request()->query('token') }}">
-            <input type="hidden" name="email" value="{{ request()->query('email') }}">
+            <input type="hidden" name="token" value="{{ $token }}">
+            <input type="hidden" name="email" value="{{ $email }}">
 
             <div class="form-group">
                 <label for="password">New Password</label>
                 <input type="password" name="password" id="password" required>
-                <div class="error-message" id="passwordError"></div>
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm New Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required>
-                <div class="error-message" id="passwordConfirmationError"></div>
             </div>
 
             <button type="submit">Reset Password</button>
@@ -112,44 +105,5 @@
             &copy; {{ date('Y') }} StudySama. All rights reserved.
         </footer>
     </div>
-
-    <script>
-        document.getElementById('resetForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
-
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                
-                if (response.ok) {
-                    window.location.href = '{{ route('password.success') }}';
-                } else {
-                    // handle validation errors
-                    if (result.errors) {
-                        document.getElementById('passwordError').textContent = result.errors.password?.[0] || '';
-                        document.getElementById('passwordConfirmationError').textContent = result.errors.password_confirmation?.[0] || '';
-                    } else {
-                        alert(result.message);
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
-    </script>
 </body>
 </html>
