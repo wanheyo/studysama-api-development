@@ -29,19 +29,13 @@ Route::get('/', function (Request $request) {
     ], 200);
 });
 
-// Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-// Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-// Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-// Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
-Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
-
-
 Route::group(['prefix' => 'studysama'], function (){
 
-    //Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    //Auth
+    Route::group(['prefix' => 'auth'], function (){
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
+        Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
+    });
 
     //user controller
     Route::group(['prefix' => 'users'], function (){

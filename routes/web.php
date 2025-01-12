@@ -19,15 +19,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('reset-password', function () {
-    return view('auth.passwords.reset', [
-        'token' => request()->token,
-        'email' => request()->email,
-    ]);
-})->name('password.reset');
+Route::group(['prefix' => 'studysama'], function (){
 
-Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
-Route::get('password/success', function () {
-    return view('auth.passwords.success');
-})->name('password.success');
+    Route::group(['prefix' => 'auth'], function (){
+        Route::get('reset-password', function () {
+            return view('auth.passwords.reset', [
+                'token' => request()->token,
+                'email' => request()->email,
+            ]);
+        })->name('password.reset');
+        
+        Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+        Route::get('password/success', function () {
+            return view('auth.passwords.success');
+        })->name('password.success');
+    });
+});
+
+
 
