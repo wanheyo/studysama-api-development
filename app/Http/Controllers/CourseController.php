@@ -288,8 +288,12 @@ class CourseController extends Controller
             ->first();
 
             $user_course_list = UserCourse::where('course_id', $validatedData['course_id'])
-            ->leftjoin('users as u', 'u.id', '=', 'user_courses.user_id')
-            ->select('u.*', 'user_courses.*')
+            ->leftjoin('users as u', 'u.id', '=', 'user_courses.user_id');
+
+            $user_course_list_detail = $user_course_list->select('u.*')
+            ->get();
+
+            $user_course_list = $user_course_list->select('user_courses.*')
             ->get();
 
             if($is_user_tutor) {
@@ -313,6 +317,7 @@ class CourseController extends Controller
                 'user_course' => $user_course,
                 'tutor' => $tutor,
                 'user_course_list' => $user_course_list,
+                'user_course_list_detail' => $user_course_list_detail
             ], 200);
 
         } catch (\Exception $e) {
