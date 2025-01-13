@@ -287,6 +287,9 @@ class CourseController extends Controller
             ->select('u.*')
             ->first();
 
+            $user_course_list = UserCourse::where('course_id', $validatedData['course_id'])
+            ->get();
+
             if($is_user_tutor) {
                 $is_user_tutor = true;
                 $is_user_student = false;  
@@ -307,6 +310,7 @@ class CourseController extends Controller
                 'is_user_student' => $is_user_student,
                 'user_course' => $user_course,
                 'tutor' => $tutor,
+                'user_course_list' => $user_course_list,
             ], 200);
 
         } catch (\Exception $e) {
