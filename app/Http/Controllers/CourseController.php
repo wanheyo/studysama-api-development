@@ -288,6 +288,8 @@ class CourseController extends Controller
             ->first();
 
             $user_course_list = UserCourse::where('course_id', $validatedData['course_id'])
+            ->leftjoin('users as u', 'u.id', '=', 'user_courses.user_id')
+            ->select('u.*', 'user_courses.*')
             ->get();
 
             if($is_user_tutor) {
